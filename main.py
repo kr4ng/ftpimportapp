@@ -9,9 +9,9 @@ app = Flask(__name__)
 api = restful.Api(app)
 
 class startjob(restful.Resource):
-    def post(self, ID):
-        json_data = request.get_json(force=True)
-        return None
+    def post(self):
+        #json_data = request.get_json(force=True)
+        return 'get filled son'
 
 api.add_resource(startjob, '/startjob')
 
