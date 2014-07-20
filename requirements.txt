@@ -7,6 +7,7 @@ Werkzeug==0.9.6
 aniso8601==0.82
 gunicorn==19.0.0
 itsdangerous==0.24
+jsonschema==2.3.0
 pytz==2014.4
 six==1.7.3
 urllib3==1.9
