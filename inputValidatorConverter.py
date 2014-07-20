@@ -8,7 +8,8 @@ def validateAndConvert(newRequest):
 	schema = {
 		"type":"object",
 		"properties":{
-			"customer":{"type": "number"},
+			"customerId":{"type": "number"},
+			"customerName":{"type": "string"},
 			"ftp":{
 				"type":"object",
 				"properties":{
@@ -46,9 +47,7 @@ def validateAndConvert(newRequest):
 		}
 	}
 	try:
-		pyNewRequest=json.loads(newRequest)
-		validate(pyNewRequest, schema)
-		return pyNewRequest
+		validate(newRequest, schema)
+		return newRequest
 	except:
-		#print "You Goofed"
 		return False
