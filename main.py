@@ -13,7 +13,7 @@ class startjob(restful.Resource):
         json_data = request.get_json(force=True)
         return None
 
-api.add_resource(merge, '/startjob')
+api.add_resource(startjob, '/startjob')
 
 if __name__ == '__main__':
     #app.run(debug=True)
