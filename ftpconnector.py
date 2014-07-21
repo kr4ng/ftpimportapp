@@ -17,6 +17,7 @@ class Ftpconnector(object):
         self.ftpsite = args[0]['url']
         self.username = args[0]['username']
         self.password = args[0]['password']
+        self.debug=True
         if self.ftpsite and self.username and self.password:
             self.ftp.connect(self.ftpsite)
             self.ftp.login(self.username, self.password)
@@ -57,6 +58,10 @@ class Csvreader(Ftpconnector):
         if args[0]['path']:
             self.path = args[0]['path']
             self.tempfilename = self.username
+            self.localpath='tmp/' + self.tempfilename + '.csv'
+            self.filesize=self.ftp.size(self.path)
+            if self.debug:
+                print self.filesize
         else:
             print 'No path specified. Cannot Initialize'
 
@@ -69,20 +74,27 @@ class Csvreader(Ftpconnector):
         import os
         os.remove("tmp/" + self.tempfilename + '.csv')     
 
-    def ftpcsv2tmpcsv(self, *folder):
+    def ftpcsv2tmpcsv(self, rest=0):
         '''
         :input - *folder - if specified then the path of the csv that will
                            be stored local before going to s3 will not be
                            tmp/self.tempfilename it will be folder/self.tempfilename
         :return - the relative path for use by the s3connector
         '''
-        if not folder:
-            self.ftp.retrbinary("RETR " + self.path ,open('tmp/' + self.tempfilename + '.csv', 'wb').write)
-            return 'tmp/' + self.tempfilename + '.csv'
-        else:
-            self.ftp.retrbinary("RETR " + self.path ,open(folder + self.tempfilename + '.csv', 'wb').write)
-            return folder + self.tempfilename + '.csv'
+        self.ftp.retrbinary("RETR " + self.path,open(self.localpath, 'wb').write) #maybe add REST command
+        return self.localpath
+        #else:
+        #    self.ftp.retrbinary("RETR " + self.path ,open(folder + self.tempfilename + '.csv', 'wb').write, rest=rest)
+        #    return folder + self.tempfilename + '.csv'
 
+    def tmpcsvhelper(self, chunk):
+        open(self.localpath, 'wb').write(chunk)
+
+    def executeByChunk(self, callbackFunc, chunksize):
+        '''
+        This is a wrapper for the retrBinary method using chunks
+        '''
+        self.ftp.retrbinary("RETR " + self.path, callbackFunc) ##REMOVED CHUNKSIZE PARAM FOR DEBUG
 
 if __name__ == '__main__':
     creds = {"url":"ftp.marketosolutionsconsulting.com", "username":"marketos", "password":"$C_rockst@r5", "path":"rightstack.csv"}

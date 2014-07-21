@@ -9,6 +9,7 @@ from threading import Thread
 
 from ftpconnector import Csvreader
 from s3connector import S3manipulator
+from ftptomkto import FtpToMktoTransfer
 
 #from models import
 
@@ -44,34 +45,34 @@ def transfer(job, pyinput):
     '''
     This is a test of the following:
     1. open an FTP connection
-    2. grab file and store it locally (ephermeral heroku memory)
-    3. open s3 connection
-    4. take local file and add it to s3bucket
-    5. delete local file
+    2. Iterate through the CSV file and send data (x bytes) to marketo
     '''
     creds = pyinput['ftp']
     #creds = {"url":"ftp.marketosolutionsconsulting.com", "username":"marketos", "password":"$C_rockst@r5", "path":"rightstack.csv"}
     #Create a new Csvreader
     reader = Csvreader(creds)
+    ftptomkto=FtpToMktoTransfer(pyinput['mkto'],pyinput['map'], reader)
+    ftptomkto.startTransfer()
+    #reader.executeByChunk(ftptomkto.chunkToMkto, 524880)
     #use the readers ftp to tmp folder file transfer method
-    localfilepath = reader.ftpcsv2tmpcsv()
+    #localfilepath = reader.ftpcsv2tmpcsv()
     #kill the readers connection to ftp
     reader.endconnection()
     #Create a new S3manipulator
-    a = S3manipulator(pyinput['customerName'].lower().replace(' ',''))
+    ##a = S3manipulator(pyinput['customerName'].lower().replace(' ',''))
     #Create bucket
-    a.create_bucket()
+    ##a.create_bucket()
     #Store data in bucket
-    a.store_data(pathtofile=localfilepath)
+    ##a.store_data(pathtofile=localfilepath)
     #Delete temp file
     #reader.delete_file()
-    job.setStatus('S3 Transfer Complete')
+    job.setStatus('Job Complete')
     db.session.add(job)
     db.session.commit()
     #open file on S3
     #bucketobject = a.fetch_file_from_bucket()
     #contents = key.get_contents_as_string()
-    print contents
+
     '''
     for e in bucketobject.list(prefix=bucketobject.filename):
          unfinished_line = 
@@ -87,7 +88,7 @@ def transfer(job, pyinput):
             
     '''
     #Delete bucket
-    a.delete_bucket()
+    #a.delete_bucket()
     return None
 
 if __name__ == '__main__':
