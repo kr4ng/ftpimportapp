@@ -65,7 +65,7 @@ def transfer(job, pyinput):
     #Store data in bucket
     ##a.store_data(pathtofile=localfilepath)
     #Delete temp file
-    #reader.delete_file()
+    reader.delete_file()
     job.setStatus('Job Complete')
     db.session.add(job)
     db.session.commit()
