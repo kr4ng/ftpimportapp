@@ -5,14 +5,14 @@ import json
 from datetime import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 
-'''
+
 from flask import Flask
 import os
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgres://localhost:5432/rightstackftp")
-'''
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgres://bfrvhaxkuagzhn:FPIYxY8n7By_1A-Oqovlhah_8g@ec2-54-197-250-40.compute-1.amazonaws.com:5432/d2qsuiqdvbg6an")
 
-db=SQLAlchemy()
+
+db=SQLAlchemy(app)
 
 class Job(db.Model):
 	__tablename__ = "job"
