@@ -19,7 +19,9 @@ from inputValidatorConverter import validateAndConvert
 
 app = Flask(__name__)
 #start the database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgres://localhost:5432/rightstackftp")
+#postgres://bfrvhaxkuagzhn:FPIYxY8n7By_1A-Oqovlhah_8g@ec2-54-197-250-40.compute-1.amazonaws.com:5432/d2qsuiqdvbg6an
+#postgres://localhost:5432/rightstackftp
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgres://bfrvhaxkuagzhn:FPIYxY8n7By_1A-Oqovlhah_8g@ec2-54-197-250-40.compute-1.amazonaws.com:5432/d2qsuiqdvbg6an")
 db = SQLAlchemy(app)
 
 api = restful.Api(app)
