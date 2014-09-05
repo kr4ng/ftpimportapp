@@ -16,7 +16,8 @@ def validateAndConvert(newRequest):
 					"url":{"type": "string"},
 					"username":{"type": "string"},
 					"password":{"type": "string"},
-					"path":{"type": "string"}
+					"path":{"type": "string"},
+					"csvtype":{"type": "string"}
 				}
 			},
 			"mkto":{
