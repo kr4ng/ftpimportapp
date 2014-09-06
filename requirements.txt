@@ -9,9 +9,11 @@ Werkzeug==0.9.6
 aniso8601==0.82
 boto==2.31.1
 gunicorn==19.0.0
+iso8601==0.1.10
 itsdangerous==0.24
 jsonschema==2.3.0
 psycopg2==2.5.3
+-e git://github.com/kr4ng/pymarketo.git#egg=pymarketo
 pytz==2014.4
 requests==2.3.0
 six==1.7.3
