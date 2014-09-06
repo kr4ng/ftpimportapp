@@ -16,8 +16,7 @@ def validateAndConvert(newRequest):
 					"url":{"type": "string"},
 					"username":{"type": "string"},
 					"password":{"type": "string"},
-					"path":{"type": "string"},
-					"csvtype":{"type": "string"}
+					"path":{"type": "string"}
 				}
 			},
 			"mkto":{
@@ -32,7 +31,8 @@ def validateAndConvert(newRequest):
 						}
 					},
 					"program":{"type": "string"},
-					"list":{"type": "string"}
+					"list":{"type": "string"},
+					"targetobject":{"type": "string"}
 				}
 			},
 			"map":{
