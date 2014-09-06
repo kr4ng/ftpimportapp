@@ -19,7 +19,8 @@ class FtpToMktoTransfer(object):
         :                        "userid":"mktodemoaccount1961_3786898253485E77E66916", 
         :                        "encryptionkey":"52545396568742865533448855EE7789EE66772CE512" }, 
         :                        "program":"testing", 
-        :                        "list":"TestList" 
+        :                        "list":"TestList"
+        :                        "targetobject":"shoppingcart" 
         :                        }
         :mapIn = [ { "ftp":"First name", "mkto":"First Name" },
         :           { "ftp": "Email", "mkto": "Email Address" },
@@ -32,20 +33,19 @@ class FtpToMktoTransfer(object):
         :          "username":"marketos", 
         :          "password":"$C_rockst@r5", 
         :          "path":"rightstackcustomobject.csv",
-        :          "csvtype":"customtable"
         :          }
-        :Constructor for FtpToMktoTransfer. When instantiated, the csvtype will determine
+        :Constructor for FtpToMktoTransfer. When instantiated, the targetobject will determine
         :the marketo call that will be used in the mktoclasses.py
         :Other Notes:
         :self.oldpart = incomplete line temp storage
-        :self.csvtype = reader.csvtype which comes from the json which will either be customtable or standardtable
+        :self.targetobject = reader.targetobject which comes from the json which will either be customtable or standardtable
         '''
         self.oldpart='' ##INCOMPLETE LINE TEMP STORAGE
         ##Instance new Marketo Connection and list
         mktocreds=mkto['credentials']
-        self.csvtype=reader.csvtype
+        self.targetobject=mkto['targetobject']
         self.mktoClient=pymarketo.Client(str(mktocreds['url']), str(mktocreds['userid']), str(mktocreds['encryptionkey']))
-        if self.csvtype == 'customtable':
+        if self.targetobject !== 'lead':
             self.mktoCustomObject=mktoclasses.MktoCustomObject(self.mktoClient)
         else:
             self.mktoList=mktoclasses.MktoList(self.mktoClient, mkto['program'], mkto['list'])
@@ -117,12 +117,11 @@ class FtpToMktoTransfer(object):
         '''
         :inputs - None, but requires successful instantiation of the class
         :When called, this starts transfer of a csvfile into Marketo. This is the loop
-        :which then calls chunkToMkto or customObjectCsvToMkto if the csvtype is custom.
+        :which then calls chunkToMkto or customObjectCsvToMkto if the targetobject is custom.
         :This is the Main Loop.
         '''
-        if self.csvtype == 'customtable':
+        if self.targetobject !== 'lead':
             while self.currentbytes<=self.reader.filesize:
-                print 'in loop'
                 self.reader.ftpcsv2tmpcsv(rest=self.currentbytes)
                 tmpfile=open(self.reader.localpath, 'rU')
                 self.customObjectCsvToMkto(tmpfile)
@@ -158,9 +157,9 @@ if __name__ == '__main__':
     reader = Csvreader(creds)
     creds = {"url":"ftp.marketosolutionsconsulting.com", "username":"marketos", "password":"$C_rockst@r5", "path":"rightstackcustomobject.csv"}
     '''
-    mkto = { "credentials":{ "url":"https://939-LPS-822.mktoapi.com/soap/mktows/2_3", "userid":"mktodemoaccount1961_3786898253485E77E66916", "encryptionkey":"52545396568742865533448855EE7789EE66772CE512" }, "program":"testing", "list":"TestList" }
+    mkto = { "credentials":{ "url":"https://939-LPS-822.mktoapi.com/soap/mktows/2_3", "userid":"mktodemoaccount1961_3786898253485E77E66916", "encryptionkey":"52545396568742865533448855EE7789EE66772CE512" }, "program":"testing", "list":"TestList", "targetobject":"shoppingcart" }
     mapIn = [ { "ftp":"First name", "mkto":"First Name" },{ "ftp": "Email", "mkto": "Email Address" },{"ftp":"Company", "mkto":"Company Name"},{"ftp":"Address", "mkto":"Address"} ]
-    creds = {"url":"ftp.marketosolutionsconsulting.com", "username":"marketos", "password":"$C_rockst@r5", "path":"rightstackcustomobject.csv", "csvtype":"customtable"}
+    creds = {"url":"ftp.marketosolutionsconsulting.com", "username":"marketos", "password":"$C_rockst@r5", "path":"rightstackcustomobject.csv"}
     from ftpconnector import Csvreader
     reader = Csvreader(creds)
     ftptomkto = FtpToMktoTransfer(mkto, mapIn, reader)

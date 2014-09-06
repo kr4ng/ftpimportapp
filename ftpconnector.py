@@ -17,7 +17,6 @@ class Ftpconnector(object):
         self.ftpsite = args[0]['url']
         self.username = args[0]['username']
         self.password = args[0]['password']
-        self.csvtype = args[0]['csvtype']
         self.debug=True
         if self.ftpsite and self.username and self.password:
             self.ftp.connect(self.ftpsite)
