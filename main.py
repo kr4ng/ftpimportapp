@@ -16,7 +16,7 @@ from threading import Thread
 
 #These are the transfer functions
 from ftpconnector import Csvreader
-from s3connector import S3manipulator
+
 from ftptomkto import FtpToMktoTransfer
 
 #This is the Job model and the schema validator functions
