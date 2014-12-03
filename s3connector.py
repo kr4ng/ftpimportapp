@@ -29,8 +29,7 @@ class S3manipulator(object):
     fileobject = None
     filename = None
     #AWS Keys which will become global environment variables
-    AWS_ACCESS_KEY_ID = 'AKIAIWPNPK5BSTVN5AGQ'
-    AWS_SECRET_ACCESS_KEY = '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'
+    #insert here
 
     def __init__(self, accountname, awskey=None, awssecretkey=None):
         '''
